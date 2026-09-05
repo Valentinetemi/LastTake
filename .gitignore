@@ -28,3 +28,12 @@ __pycache__/
 .ruff_cache/
 .coverage
 htmlcov/
+
+# Environment files, credentials, and private keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
