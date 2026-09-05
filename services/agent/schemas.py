@@ -1,7 +1,7 @@
 """Runtime-validatable shared contracts for LastTake."""
 
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -152,3 +152,13 @@ class WrapDecision(ContractModel):
         if self.verdict is Verdict.PICKUP_REQUIRED and self.pickup_plan is None:
             raise ValueError("pickup_required decisions need a pickup_plan")
         return self
+
+
+class SSEEvent(ContractModel):
+    event_id: NonEmptyString
+    event_type: SSEEventType
+    scene_id: NonEmptyString
+    take_id: NonEmptyString | None
+    sequence: Annotated[int, Field(ge=0)]
+    payload: dict[str, Any]
+    created_at: Timestamp

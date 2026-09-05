@@ -183,3 +183,15 @@ export const wrapDecisionSchema = z
   });
 
 export type WrapDecision = z.infer<typeof wrapDecisionSchema>;
+
+export const sseEventSchema = z.strictObject({
+  event_id: nonEmptyStringSchema,
+  event_type: sseEventTypeSchema,
+  scene_id: nonEmptyStringSchema,
+  take_id: nonEmptyStringSchema.nullable(),
+  sequence: z.number().int().min(0),
+  payload: z.record(z.string(), z.unknown()),
+  created_at: timestampSchema,
+});
+
+export type SSEEvent = z.infer<typeof sseEventSchema>;
