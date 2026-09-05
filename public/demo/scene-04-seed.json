@@ -1,0 +1,60 @@
+{
+  "scene": {
+    "scene_id": "scene_04",
+    "name": "Scene 04 — The Letter",
+    "script_uri": "demo://scene-04-script.txt",
+    "created_at": "2026-09-05T12:00:00Z"
+  },
+  "script_beats": [
+    {
+      "beat_id": "beat_01_mug_position",
+      "scene_id": "scene_04",
+      "sequence": 1,
+      "evidence_type": "prop_state",
+      "description": "A blue mug remains on screen-left.",
+      "expected_value": "mug_screen_left",
+      "line_text": null
+    },
+    {
+      "beat_id": "beat_02_envelope_entry",
+      "scene_id": "scene_04",
+      "sequence": 2,
+      "evidence_type": "hand_action_state",
+      "description": "A cream envelope enters in the left hand.",
+      "expected_value": "envelope_enters_left_hand",
+      "line_text": null
+    },
+    {
+      "beat_id": "beat_03_envelope_placement",
+      "scene_id": "scene_04",
+      "sequence": 3,
+      "evidence_type": "prop_state",
+      "description": "The envelope is placed on a closed black notebook.",
+      "expected_value": "envelope_on_closed_black_notebook",
+      "line_text": null
+    },
+    {
+      "beat_id": "beat_04_envelope_taps",
+      "scene_id": "scene_04",
+      "sequence": 4,
+      "evidence_type": "hand_action_state",
+      "description": "The right hand taps the envelope twice.",
+      "expected_value": "right_hand_taps_twice",
+      "line_text": null
+    },
+    {
+      "beat_id": "beat_05_line_delivery",
+      "scene_id": "scene_04",
+      "sequence": 5,
+      "evidence_type": "dialogue_story_beat",
+      "description": "The line is delivered while the envelope remains visible.",
+      "expected_value": "line_delivered_with_envelope_visible",
+      "line_text": "If anyone asks, you never saw this."
+    }
+  ],
+  "takes": [],
+  "observations": [],
+  "flags": [],
+  "decision": null,
+  "sse_events": []
+}
