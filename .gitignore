@@ -1,0 +1,17 @@
+# Node.js dependencies and package-manager state
+node_modules/
+.pnp/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Next.js, frontend builds, tests, and TypeScript
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+
