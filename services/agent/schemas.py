@@ -126,3 +126,29 @@ class Flag(ContractModel):
         if self.master_take_id == self.compared_take_id:
             raise ValueError("master_take_id and compared_take_id must differ")
         return self
+
+
+class WrapDecision(ContractModel):
+    decision_id: NonEmptyString
+    scene_id: NonEmptyString
+    master_take_id: NonEmptyString
+    evaluated_take_id: NonEmptyString
+    verdict: Verdict
+    summary: NonEmptyString
+    confidence: Confidence
+    evidence_ids: Annotated[list[NonEmptyString], Field(min_length=1)]
+    flag_ids: list[NonEmptyString]
+    pickup_plan: NonEmptyString | None
+    created_at: Timestamp
+
+    @model_validator(mode="after")
+    def validate_decision(self) -> "WrapDecision":
+        if self.master_take_id == self.evaluated_take_id:
+            raise ValueError("master_take_id and evaluated_take_id must differ")
+        if len(self.evidence_ids) != len(set(self.evidence_ids)):
+            raise ValueError("evidence_ids must be unique")
+        if len(self.flag_ids) != len(set(self.flag_ids)):
+            raise ValueError("flag_ids must be unique")
+        if self.verdict is Verdict.PICKUP_REQUIRED and self.pickup_plan is None:
+            raise ValueError("pickup_required decisions need a pickup_plan")
+        return self

@@ -136,3 +136,50 @@ export const flagSchema = z
   });
 
 export type Flag = z.infer<typeof flagSchema>;
+
+export const wrapDecisionSchema = z
+  .strictObject({
+    decision_id: nonEmptyStringSchema,
+    scene_id: nonEmptyStringSchema,
+    master_take_id: nonEmptyStringSchema,
+    evaluated_take_id: nonEmptyStringSchema,
+    verdict: verdictSchema,
+    summary: nonEmptyStringSchema,
+    confidence: confidenceSchema,
+    evidence_ids: z.array(nonEmptyStringSchema).min(1),
+    flag_ids: z.array(nonEmptyStringSchema),
+    pickup_plan: nonEmptyStringSchema.nullable(),
+    created_at: timestampSchema,
+  })
+  .superRefine((decision, context) => {
+    if (decision.master_take_id === decision.evaluated_take_id) {
+      context.addIssue({
+        code: "custom",
+        message: "master_take_id and evaluated_take_id must differ",
+        path: ["evaluated_take_id"],
+      });
+    }
+    if (new Set(decision.evidence_ids).size !== decision.evidence_ids.length) {
+      context.addIssue({
+        code: "custom",
+        message: "evidence_ids must be unique",
+        path: ["evidence_ids"],
+      });
+    }
+    if (new Set(decision.flag_ids).size !== decision.flag_ids.length) {
+      context.addIssue({
+        code: "custom",
+        message: "flag_ids must be unique",
+        path: ["flag_ids"],
+      });
+    }
+    if (decision.verdict === "pickup_required" && decision.pickup_plan === null) {
+      context.addIssue({
+        code: "custom",
+        message: "pickup_required decisions need a pickup_plan",
+        path: ["pickup_plan"],
+      });
+    }
+  });
+
+export type WrapDecision = z.infer<typeof wrapDecisionSchema>;
