@@ -28,5 +28,19 @@
       "directory": "apps/web",
       "changeProcessCWD": true
     }
-  ]
+  ],
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "apps/web/.next": true
+  },
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/node_modules/**": true,
+    "**/.venv/**": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/.venv": true
+  }
 }
