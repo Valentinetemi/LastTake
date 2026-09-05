@@ -35,3 +35,19 @@ LastTake/
 ├── .vscode/           # Shared editor settings and recommendations
 └── .env.example       # Credential-free environment contract
 ```
+
+## Local setup
+
+The frontend can be run independently while the agent and database services are still placeholders.
+
+```bash
+cp .env.example .env
+npm install --prefix apps/web
+npm run dev --prefix apps/web
+```
+
+Add only local credentials to `.env`; never commit that file. Service-specific installation, database initialization, and demo-data steps will be documented when those components exist.
+
+## AI and sponsor technology disclosure
+
+LastTake is planned to use Google Gemini for structured multimodal evidence extraction and Google ADK for agent orchestration. It is also planned to use ClickHouse through the official ClickHouse MCP server to retain the approved master take and support later comparisons. These integrations are disclosed as planned architecture at this stage; none of the AI, agent, database, or analysis behavior has been implemented yet.
