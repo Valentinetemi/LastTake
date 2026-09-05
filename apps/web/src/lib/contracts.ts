@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+const nonEmptyStringSchema = z.string().min(1);
+export const timecodeSchema = z.string().regex(/^\d{2}:\d{2}:\d{2}\.\d{3}$/);
+export const timestampSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/);
+export const sourceUriSchema = z
+  .string()
+  .regex(/^[A-Za-z][A-Za-z0-9+.-]*:\/\/\S+$/);
+export const confidenceSchema = z.number().min(0).max(1);
+
 export const verdictValues = [
   "missing_evidence",
   "pickup_required",
