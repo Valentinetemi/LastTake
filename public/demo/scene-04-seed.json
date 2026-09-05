@@ -52,7 +52,26 @@
       "line_text": "If anyone asks, you never saw this."
     }
   ],
-  "takes": [],
+  "takes": [
+    {
+      "take_id": "take_a",
+      "scene_id": "scene_04",
+      "label": "Take A",
+      "source_uri": "demo://scene-04/take-a.mp4",
+      "duration_seconds": 12.0,
+      "is_approved_master": true,
+      "captured_at": "2026-09-05T12:05:00Z"
+    },
+    {
+      "take_id": "take_b",
+      "scene_id": "scene_04",
+      "label": "Take B",
+      "source_uri": "demo://scene-04/take-b.mp4",
+      "duration_seconds": 12.0,
+      "is_approved_master": false,
+      "captured_at": "2026-09-05T12:12:00Z"
+    }
+  ],
   "observations": [],
   "flags": [],
   "decision": null,
