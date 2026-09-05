@@ -1,3 +1,3 @@
 # Agent service
 
-Reserved for the future Python FastAPI and Google ADK service.
+Contains LastTake's shared Pydantic contracts and their tests. The future Python FastAPI and Google ADK service will be built here.
