@@ -20,3 +20,26 @@ export const evidenceTypeValues = [
 export const evidenceTypeSchema = z.enum(evidenceTypeValues);
 
 export type EvidenceType = z.infer<typeof evidenceTypeSchema>;
+
+export const approvalStateValues = ["pending", "approved", "rejected"] as const;
+export const approvalStateSchema = z.enum(approvalStateValues);
+export type ApprovalState = z.infer<typeof approvalStateSchema>;
+
+export const flagTypeValues = [
+  "continuity_mismatch",
+  "action_mismatch",
+  "coverage_missing",
+] as const;
+export const flagTypeSchema = z.enum(flagTypeValues);
+export type FlagType = z.infer<typeof flagTypeSchema>;
+
+export const sseEventTypeValues = [
+  "analysis_started",
+  "observation_created",
+  "flag_created",
+  "decision_created",
+  "analysis_completed",
+  "error",
+] as const;
+export const sseEventTypeSchema = z.enum(sseEventTypeValues);
+export type SSEEventType = z.infer<typeof sseEventTypeSchema>;
