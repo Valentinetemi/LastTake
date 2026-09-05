@@ -290,6 +290,32 @@
       "blocking": true
     }
   ],
-  "decision": null,
+  "decision": {
+    "decision_id": "decision_scene_04_take_b",
+    "scene_id": "scene_04",
+    "master_take_id": "take_a",
+    "evaluated_take_id": "take_b",
+    "verdict": "pickup_required",
+    "summary": "Take B conflicts with the approved master on mug position, envelope entry hand, tap count, and envelope visibility during the line.",
+    "confidence": 0.97,
+    "evidence_ids": [
+      "obs_a_mug_position",
+      "obs_b_mug_position",
+      "obs_a_envelope_entry",
+      "obs_b_envelope_entry",
+      "obs_a_envelope_taps",
+      "obs_b_envelope_taps",
+      "obs_a_line_delivery",
+      "obs_b_line_delivery"
+    ],
+    "flag_ids": [
+      "flag_mug_side",
+      "flag_entry_hand",
+      "flag_tap_count",
+      "flag_envelope_visibility"
+    ],
+    "pickup_plan": "Six-second insert: restore the mug to screen-left, bring the envelope in with the left hand, place it on the notebook, tap twice, and deliver the line while the envelope remains visible.",
+    "created_at": "2026-09-05T12:22:00Z"
+  },
   "sse_events": []
 }
