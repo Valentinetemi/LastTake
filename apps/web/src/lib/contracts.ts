@@ -195,3 +195,170 @@ export const sseEventSchema = z.strictObject({
 });
 
 export type SSEEvent = z.infer<typeof sseEventSchema>;
+
+export const completeDemoSeedSchema = z
+  .strictObject({
+    scene: sceneSchema,
+    script_beats: z.array(scriptBeatSchema).min(1),
+    takes: z.array(takeSchema).min(2),
+    observations: z.array(observationSchema).min(1),
+    flags: z.array(flagSchema).min(1),
+    decision: wrapDecisionSchema,
+    sse_events: z.array(sseEventSchema).min(1),
+  })
+  .superRefine((seed, context) => {
+    const addIssue = (path: (string | number)[], message: string) => {
+      context.addIssue({ code: "custom", path, message });
+    };
+    const requireUnique = (
+      values: (string | number)[],
+      path: string,
+      label: string,
+    ) => {
+      if (new Set(values).size !== values.length) {
+        addIssue([path], `${label} must be unique`);
+      }
+    };
+
+    requireUnique(seed.script_beats.map((beat) => beat.beat_id), "script_beats", "beat IDs");
+    requireUnique(seed.takes.map((take) => take.take_id), "takes", "take IDs");
+    requireUnique(
+      seed.observations.map((observation) => observation.observation_id),
+      "observations",
+      "observation IDs",
+    );
+    requireUnique(seed.flags.map((flag) => flag.flag_id), "flags", "flag IDs");
+    requireUnique(seed.sse_events.map((event) => event.event_id), "sse_events", "event IDs");
+    requireUnique(seed.sse_events.map((event) => event.sequence), "sse_events", "event sequences");
+
+    const sceneId = seed.scene.scene_id;
+    const beatById = new Map(seed.script_beats.map((beat) => [beat.beat_id, beat]));
+    const takeById = new Map(seed.takes.map((take) => [take.take_id, take]));
+    const observationById = new Map(
+      seed.observations.map((observation) => [observation.observation_id, observation]),
+    );
+    const flagIds = new Set(seed.flags.map((flag) => flag.flag_id));
+
+    seed.script_beats.forEach((beat, index) => {
+      if (beat.scene_id !== sceneId) {
+        addIssue(["script_beats", index, "scene_id"], "script beat must reference the seed scene");
+      }
+    });
+    seed.takes.forEach((take, index) => {
+      if (take.scene_id !== sceneId) {
+        addIssue(["takes", index, "scene_id"], "take must reference the seed scene");
+      }
+    });
+
+    const approvedMasters = seed.takes.filter((take) => take.is_approved_master);
+    if (approvedMasters.length !== 1) {
+      addIssue(["takes"], "the seed must contain exactly one approved master take");
+    }
+
+    seed.observations.forEach((observation, index) => {
+      const beat = beatById.get(observation.beat_id);
+      if (observation.scene_id !== sceneId) {
+        addIssue(["observations", index, "scene_id"], "observation must reference the seed scene");
+      }
+      if (!takeById.has(observation.take_id)) {
+        addIssue(["observations", index, "take_id"], "observation must reference an existing take");
+      }
+      if (!beat) {
+        addIssue(["observations", index, "beat_id"], "observation must reference an existing beat");
+      } else if (observation.evidence_type !== beat.evidence_type) {
+        addIssue(
+          ["observations", index, "evidence_type"],
+          "observation evidence type must match its script beat",
+        );
+      }
+    });
+
+    seed.flags.forEach((flag, index) => {
+      const masterObservation = observationById.get(flag.master_observation_id);
+      const comparedObservation = observationById.get(flag.compared_observation_id);
+      if (flag.scene_id !== sceneId) {
+        addIssue(["flags", index, "scene_id"], "flag must reference the seed scene");
+      }
+      if (!beatById.has(flag.beat_id)) {
+        addIssue(["flags", index, "beat_id"], "flag must reference an existing beat");
+      }
+      if (!takeById.has(flag.master_take_id)) {
+        addIssue(["flags", index, "master_take_id"], "master_take_id must reference an existing take");
+      }
+      if (!takeById.has(flag.compared_take_id)) {
+        addIssue(["flags", index, "compared_take_id"], "compared_take_id must reference an existing take");
+      }
+      if (!masterObservation || !comparedObservation) {
+        addIssue(["flags", index], "flag must reference existing observations");
+        return;
+      }
+      if (masterObservation.take_id !== flag.master_take_id) {
+        addIssue(["flags", index, "master_observation_id"], "master observation must belong to master_take_id");
+      }
+      if (comparedObservation.take_id !== flag.compared_take_id) {
+        addIssue(["flags", index, "compared_observation_id"], "compared observation must belong to compared_take_id");
+      }
+      if (
+        masterObservation.beat_id !== flag.beat_id ||
+        comparedObservation.beat_id !== flag.beat_id
+      ) {
+        addIssue(["flags", index, "beat_id"], "flag observations must belong to the referenced beat");
+      }
+      if (
+        masterObservation.evidence_type !== flag.evidence_type ||
+        comparedObservation.evidence_type !== flag.evidence_type
+      ) {
+        addIssue(["flags", index, "evidence_type"], "flag evidence type must match its observations");
+      }
+      if (masterObservation.start_timecode !== flag.master_timecode) {
+        addIssue(["flags", index, "master_timecode"], "master_timecode must match the master observation");
+      }
+      if (comparedObservation.start_timecode !== flag.compared_timecode) {
+        addIssue(["flags", index, "compared_timecode"], "compared_timecode must match the compared observation");
+      }
+    });
+
+    const decision = seed.decision;
+    if (decision.scene_id !== sceneId) {
+      addIssue(["decision", "scene_id"], "decision must reference the seed scene");
+    }
+    if (!takeById.has(decision.master_take_id)) {
+      addIssue(["decision", "master_take_id"], "master_take_id must reference an existing take");
+    } else if (!takeById.get(decision.master_take_id)?.is_approved_master) {
+      addIssue(["decision", "master_take_id"], "master_take_id must be the approved master");
+    }
+    if (!takeById.has(decision.evaluated_take_id)) {
+      addIssue(["decision", "evaluated_take_id"], "evaluated_take_id must reference an existing take");
+    }
+    decision.evidence_ids.forEach((evidenceId, index) => {
+      if (!observationById.has(evidenceId)) {
+        addIssue(["decision", "evidence_ids", index], "evidence ID must reference an observation");
+      }
+    });
+    if (
+      decision.flag_ids.length !== flagIds.size ||
+      decision.flag_ids.some((flagId) => !flagIds.has(flagId))
+    ) {
+      addIssue(["decision", "flag_ids"], "decision must reference every seed flag exactly once");
+    }
+    const decisionEvidenceIds = new Set(decision.evidence_ids);
+    seed.flags.forEach((flag) => {
+      if (!decisionEvidenceIds.has(flag.master_observation_id)) {
+        addIssue(["decision", "evidence_ids"], "decision evidence must include every flagged observation");
+      }
+      if (!decisionEvidenceIds.has(flag.compared_observation_id)) {
+        addIssue(["decision", "evidence_ids"], "decision evidence must include every flagged observation");
+      }
+    });
+
+    seed.sse_events.forEach((event, index) => {
+      if (event.scene_id !== sceneId) {
+        addIssue(["sse_events", index, "scene_id"], "SSE event must reference the seed scene");
+      }
+      if (event.take_id !== null && !takeById.has(event.take_id)) {
+        addIssue(["sse_events", index, "take_id"], "SSE event take_id must reference an existing take");
+      }
+    });
+  });
+
+export type CompleteDemoSeed = z.infer<typeof completeDemoSeedSchema>;
