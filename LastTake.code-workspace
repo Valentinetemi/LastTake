@@ -1,0 +1,11 @@
+{
+  "folders": [
+    {
+      "name": "LastTake",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder}"
+  }
+}
