@@ -62,3 +62,15 @@ export const sceneSchema = z.strictObject({
 });
 
 export type Scene = z.infer<typeof sceneSchema>;
+
+export const scriptBeatSchema = z.strictObject({
+  beat_id: nonEmptyStringSchema,
+  scene_id: nonEmptyStringSchema,
+  sequence: z.number().int().min(1),
+  evidence_type: evidenceTypeSchema,
+  description: nonEmptyStringSchema,
+  expected_value: nonEmptyStringSchema,
+  line_text: nonEmptyStringSchema.nullable(),
+});
+
+export type ScriptBeat = z.infer<typeof scriptBeatSchema>;

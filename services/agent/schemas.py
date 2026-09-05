@@ -61,3 +61,13 @@ class Scene(ContractModel):
     name: NonEmptyString
     script_uri: SourceUri
     created_at: Timestamp
+
+
+class ScriptBeat(ContractModel):
+    beat_id: NonEmptyString
+    scene_id: NonEmptyString
+    sequence: Annotated[int, Field(ge=1)]
+    evidence_type: EvidenceType
+    description: NonEmptyString
+    expected_value: NonEmptyString
+    line_text: NonEmptyString | None
