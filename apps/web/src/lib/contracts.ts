@@ -112,3 +112,27 @@ export const observationSchema = z
   );
 
 export type Observation = z.infer<typeof observationSchema>;
+
+export const flagSchema = z
+  .strictObject({
+    flag_id: nonEmptyStringSchema,
+    scene_id: nonEmptyStringSchema,
+    beat_id: nonEmptyStringSchema,
+    evidence_type: evidenceTypeSchema,
+    flag_type: flagTypeSchema,
+    master_take_id: nonEmptyStringSchema,
+    compared_take_id: nonEmptyStringSchema,
+    master_observation_id: nonEmptyStringSchema,
+    compared_observation_id: nonEmptyStringSchema,
+    master_timecode: timecodeSchema,
+    compared_timecode: timecodeSchema,
+    description: nonEmptyStringSchema,
+    confidence: confidenceSchema,
+    blocking: z.boolean(),
+  })
+  .refine((flag) => flag.master_take_id !== flag.compared_take_id, {
+    message: "master_take_id and compared_take_id must differ",
+    path: ["compared_take_id"],
+  });
+
+export type Flag = z.infer<typeof flagSchema>;

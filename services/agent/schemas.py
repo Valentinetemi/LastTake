@@ -103,3 +103,26 @@ class Observation(ContractModel):
         if self.end_timecode < self.start_timecode:
             raise ValueError("end_timecode must not precede start_timecode")
         return self
+
+
+class Flag(ContractModel):
+    flag_id: NonEmptyString
+    scene_id: NonEmptyString
+    beat_id: NonEmptyString
+    evidence_type: EvidenceType
+    flag_type: FlagType
+    master_take_id: NonEmptyString
+    compared_take_id: NonEmptyString
+    master_observation_id: NonEmptyString
+    compared_observation_id: NonEmptyString
+    master_timecode: Timecode
+    compared_timecode: Timecode
+    description: NonEmptyString
+    confidence: Confidence
+    blocking: bool
+
+    @model_validator(mode="after")
+    def validate_distinct_takes(self) -> "Flag":
+        if self.master_take_id == self.compared_take_id:
+            raise ValueError("master_take_id and compared_take_id must differ")
+        return self
