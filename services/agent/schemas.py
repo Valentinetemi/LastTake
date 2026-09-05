@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 TIMECODE_PATTERN = r"^\d{2}:\d{2}:\d{2}\.\d{3}$"
 TIMESTAMP_PATTERN = r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$"
@@ -81,3 +81,25 @@ class Take(ContractModel):
     duration_seconds: Annotated[float, Field(gt=0)]
     is_approved_master: bool
     captured_at: Timestamp
+
+
+class Observation(ContractModel):
+    observation_id: NonEmptyString
+    scene_id: NonEmptyString
+    take_id: NonEmptyString
+    beat_id: NonEmptyString
+    evidence_type: EvidenceType
+    start_timecode: Timecode
+    end_timecode: Timecode
+    description: NonEmptyString
+    normalized_value: NonEmptyString
+    confidence: Confidence
+    source_uri: SourceUri
+    approval_state: ApprovalState
+    created_at: Timestamp
+
+    @model_validator(mode="after")
+    def validate_timecode_order(self) -> "Observation":
+        if self.end_timecode < self.start_timecode:
+            raise ValueError("end_timecode must not precede start_timecode")
+        return self

@@ -86,3 +86,29 @@ export const takeSchema = z.strictObject({
 });
 
 export type Take = z.infer<typeof takeSchema>;
+
+export const observationSchema = z
+  .strictObject({
+    observation_id: nonEmptyStringSchema,
+    scene_id: nonEmptyStringSchema,
+    take_id: nonEmptyStringSchema,
+    beat_id: nonEmptyStringSchema,
+    evidence_type: evidenceTypeSchema,
+    start_timecode: timecodeSchema,
+    end_timecode: timecodeSchema,
+    description: nonEmptyStringSchema,
+    normalized_value: nonEmptyStringSchema,
+    confidence: confidenceSchema,
+    source_uri: sourceUriSchema,
+    approval_state: approvalStateSchema,
+    created_at: timestampSchema,
+  })
+  .refine(
+    (observation) => observation.end_timecode >= observation.start_timecode,
+    {
+      message: "end_timecode must not precede start_timecode",
+      path: ["end_timecode"],
+    },
+  );
+
+export type Observation = z.infer<typeof observationSchema>;
