@@ -51,3 +51,11 @@ Add only local credentials to `.env`; never commit that file. Service-specific i
 ## AI and sponsor technology disclosure
 
 LastTake is planned to use Google Gemini for structured multimodal evidence extraction and Google ADK for agent orchestration. It is also planned to use ClickHouse through the official ClickHouse MCP server to retain the approved master take and support later comparisons. These integrations are disclosed as planned architecture at this stage; none of the AI, agent, database, or analysis behavior has been implemented yet.
+
+## Current project status
+
+Checklist Item 1 is complete: the monorepo folders, workspace configuration, environment contract, documentation skeleton, and preserved create-next-app frontend are in place. The interface, agent service, database schema, API, evidence extraction, and verdict logic have intentionally not been started.
+
+## License
+
+LastTake is available under the [MIT License](LICENSE). Copyright (c) 2026 Temiloluwa Valentine Olajuwon.
