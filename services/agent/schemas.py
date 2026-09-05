@@ -71,3 +71,13 @@ class ScriptBeat(ContractModel):
     description: NonEmptyString
     expected_value: NonEmptyString
     line_text: NonEmptyString | None
+
+
+class Take(ContractModel):
+    take_id: NonEmptyString
+    scene_id: NonEmptyString
+    label: NonEmptyString
+    source_uri: SourceUri
+    duration_seconds: Annotated[float, Field(gt=0)]
+    is_approved_master: bool
+    captured_at: Timestamp

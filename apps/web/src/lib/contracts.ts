@@ -74,3 +74,15 @@ export const scriptBeatSchema = z.strictObject({
 });
 
 export type ScriptBeat = z.infer<typeof scriptBeatSchema>;
+
+export const takeSchema = z.strictObject({
+  take_id: nonEmptyStringSchema,
+  scene_id: nonEmptyStringSchema,
+  label: nonEmptyStringSchema,
+  source_uri: sourceUriSchema,
+  duration_seconds: z.number().positive(),
+  is_approved_master: z.boolean(),
+  captured_at: timestampSchema,
+});
+
+export type Take = z.infer<typeof takeSchema>;
