@@ -54,3 +54,10 @@ class SSEEventType(str, Enum):
     DECISION_CREATED = "decision_created"
     ANALYSIS_COMPLETED = "analysis_completed"
     ERROR = "error"
+
+
+class Scene(ContractModel):
+    scene_id: NonEmptyString
+    name: NonEmptyString
+    script_uri: SourceUri
+    created_at: Timestamp

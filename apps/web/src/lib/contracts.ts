@@ -53,3 +53,12 @@ export const sseEventTypeValues = [
 ] as const;
 export const sseEventTypeSchema = z.enum(sseEventTypeValues);
 export type SSEEventType = z.infer<typeof sseEventTypeSchema>;
+
+export const sceneSchema = z.strictObject({
+  scene_id: nonEmptyStringSchema,
+  name: nonEmptyStringSchema,
+  script_uri: sourceUriSchema,
+  created_at: timestampSchema,
+});
+
+export type Scene = z.infer<typeof sceneSchema>;
