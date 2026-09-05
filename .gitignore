@@ -15,3 +15,16 @@ build/
 coverage/
 *.tsbuildinfo
 
+# Python environments, bytecode, tests, and tooling caches
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
