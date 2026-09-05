@@ -12,6 +12,17 @@
   ],
   "typescript.tsdk": "apps/web/node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "python.defaultInterpreterPath": "${workspaceFolder}/services/agent/.venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "ruff.nativeServer": "on",
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
   "eslint.workingDirectories": [
     {
       "directory": "apps/web",
