@@ -224,7 +224,72 @@
       "created_at": "2026-09-05T12:21:04Z"
     }
   ],
-  "flags": [],
+  "flags": [
+    {
+      "flag_id": "flag_mug_side",
+      "scene_id": "scene_04",
+      "beat_id": "beat_01_mug_position",
+      "evidence_type": "prop_state",
+      "flag_type": "continuity_mismatch",
+      "master_take_id": "take_a",
+      "compared_take_id": "take_b",
+      "master_observation_id": "obs_a_mug_position",
+      "compared_observation_id": "obs_b_mug_position",
+      "master_timecode": "00:00:00.000",
+      "compared_timecode": "00:00:00.000",
+      "description": "Take B moves the blue mug from screen-left to screen-right.",
+      "confidence": 0.98,
+      "blocking": true
+    },
+    {
+      "flag_id": "flag_entry_hand",
+      "scene_id": "scene_04",
+      "beat_id": "beat_02_envelope_entry",
+      "evidence_type": "hand_action_state",
+      "flag_type": "action_mismatch",
+      "master_take_id": "take_a",
+      "compared_take_id": "take_b",
+      "master_observation_id": "obs_a_envelope_entry",
+      "compared_observation_id": "obs_b_envelope_entry",
+      "master_timecode": "00:00:01.000",
+      "compared_timecode": "00:00:01.000",
+      "description": "Take B brings the cream envelope in with the right hand instead of the left.",
+      "confidence": 0.97,
+      "blocking": true
+    },
+    {
+      "flag_id": "flag_tap_count",
+      "scene_id": "scene_04",
+      "beat_id": "beat_04_envelope_taps",
+      "evidence_type": "hand_action_state",
+      "flag_type": "action_mismatch",
+      "master_take_id": "take_a",
+      "compared_take_id": "take_b",
+      "master_observation_id": "obs_a_envelope_taps",
+      "compared_observation_id": "obs_b_envelope_taps",
+      "master_timecode": "00:00:03.400",
+      "compared_timecode": "00:00:03.400",
+      "description": "Take B includes one envelope tap instead of two.",
+      "confidence": 0.95,
+      "blocking": true
+    },
+    {
+      "flag_id": "flag_envelope_visibility",
+      "scene_id": "scene_04",
+      "beat_id": "beat_05_line_delivery",
+      "evidence_type": "dialogue_story_beat",
+      "flag_type": "coverage_missing",
+      "master_take_id": "take_a",
+      "compared_take_id": "take_b",
+      "master_observation_id": "obs_a_line_delivery",
+      "compared_observation_id": "obs_b_line_delivery",
+      "master_timecode": "00:00:05.000",
+      "compared_timecode": "00:00:04.500",
+      "description": "Take B loses the envelope before the line is delivered.",
+      "confidence": 0.96,
+      "blocking": true
+    }
+  ],
   "decision": null,
   "sse_events": []
 }
