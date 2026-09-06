@@ -317,5 +317,41 @@
     "pickup_plan": "Six-second insert: restore the mug to screen-left, bring the envelope in with the left hand, place it on the notebook, tap twice, and deliver the line while the envelope remains visible.",
     "created_at": "2026-09-05T12:22:00Z"
   },
-  "sse_events": []
+  "sse_events": [
+    {
+      "event_id": "event_scene_04_analysis_started",
+      "event_type": "analysis_started",
+      "scene_id": "scene_04",
+      "take_id": "take_b",
+      "sequence": 0,
+      "payload": {
+        "master_take_id": "take_a",
+        "evaluated_take_id": "take_b"
+      },
+      "created_at": "2026-09-05T12:21:30Z"
+    },
+    {
+      "event_id": "event_scene_04_decision_created",
+      "event_type": "decision_created",
+      "scene_id": "scene_04",
+      "take_id": "take_b",
+      "sequence": 1,
+      "payload": {
+        "decision_id": "decision_scene_04_take_b",
+        "verdict": "pickup_required"
+      },
+      "created_at": "2026-09-05T12:22:00Z"
+    },
+    {
+      "event_id": "event_scene_04_analysis_completed",
+      "event_type": "analysis_completed",
+      "scene_id": "scene_04",
+      "take_id": "take_b",
+      "sequence": 2,
+      "payload": {
+        "decision_id": "decision_scene_04_take_b"
+      },
+      "created_at": "2026-09-05T12:22:01Z"
+    }
+  ]
 }

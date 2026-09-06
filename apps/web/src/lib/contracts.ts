@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 
 const nonEmptyStringSchema = z.string().min(1);
 export const timecodeSchema = z.string().regex(/^\d{2}:\d{2}:\d{2}\.\d{3}$/);

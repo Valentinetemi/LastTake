@@ -14,11 +14,12 @@ Calling wrap with a missing reaction, continuity break, or unusable line can tur
 
 ## Architecture summary
 
-The Next.js frontend will collect the script and takes. A future Python FastAPI service will use Google ADK to orchestrate Gemini visual-evidence extraction, while ClickHouse—accessed through its official MCP server—will remember the approved master and comparison history. A deterministic decision layer will map the available evidence to exactly one of `missing_evidence`, `pickup_required`, or `safe_to_wrap`.
+The Next.js frontend will collect the script and takes. Shared Zod and Pydantic contracts now define the data exchanged with a future Python FastAPI service, which will use Google ADK to orchestrate Gemini visual-evidence extraction. ClickHouse—accessed through its official MCP server—will remember the approved master and comparison history. A deterministic decision layer will map the available evidence to exactly one of `missing_evidence`, `pickup_required`, or `safe_to_wrap`.
 
 ## Technology stack
 
 - Next.js 16, React 19, TypeScript, and Tailwind CSS 4
+- Zod and Pydantic shared runtime validation
 - Python, FastAPI, and Google Agent Development Kit (planned)
 - Gemini multimodal models for structured visual evidence (planned)
 - ClickHouse through the official MCP server (planned)
@@ -29,9 +30,9 @@ The Next.js frontend will collect the script and takes. A future Python FastAPI 
 ```text
 LastTake/
 ├── apps/web/          # Existing Next.js frontend
-├── services/agent/    # Future FastAPI and Google ADK service
+├── services/agent/    # Shared Pydantic contracts; future agent service
 ├── db/                # Future ClickHouse schema and seed data
-├── public/demo/       # Future controlled demo assets
+├── public/demo/       # Controlled text/JSON fixtures; future footage
 ├── .vscode/           # Shared editor settings and recommendations
 └── .env.example       # Credential-free environment contract
 ```
@@ -48,13 +49,24 @@ npm run dev --prefix apps/web
 
 Add only local credentials to `.env`; never commit that file. Service-specific installation, database initialization, and demo-data steps will be documented when those components exist.
 
+Run the shared contract suites from the repository root:
+
+```bash
+python3 -m venv services/agent/.venv
+services/agent/.venv/bin/python -m pip install -r services/agent/requirements-dev.txt
+services/agent/.venv/bin/python -m pytest services/agent/tests
+npm run test:contracts --prefix apps/web
+```
+
+Both suites load and validate `public/demo/scene-04-seed.json` without transforming it.
+
 ## AI and sponsor technology disclosure
 
-LastTake is planned to use Google Gemini for structured multimodal evidence extraction and Google ADK for agent orchestration. It is also planned to use ClickHouse through the official ClickHouse MCP server to retain the approved master take and support later comparisons. These integrations are disclosed as planned architecture at this stage; none of the AI, agent, database, or analysis behavior has been implemented yet.
+LastTake is planned to use Google Gemini for structured multimodal evidence extraction and Google ADK for agent orchestration. It is also planned to use ClickHouse through the official ClickHouse MCP server to retain the approved master take and support later comparisons. The shared contracts and deterministic demo fixture contain representative evidence only; no AI, agent, database, or analysis runtime has been implemented yet.
 
 ## Current project status
 
-Checklist Item 1 is complete: the monorepo folders, workspace configuration, environment contract, documentation skeleton, and preserved create-next-app frontend are in place. The interface, agent service, database schema, API, evidence extraction, and verdict logic have intentionally not been started.
+Checklist Items 1 and 2 are complete: the workspace is scaffolded, matching Zod/Pydantic contracts are in place, and the controlled Scene 04 fixture models an approved master, deliberate continuity conflicts, a `pickup_required` decision, and its SSE lifecycle. The interface, agent runtime, database schema, API, evidence extraction, and verdict resolver have intentionally not been started.
 
 ## License
 
